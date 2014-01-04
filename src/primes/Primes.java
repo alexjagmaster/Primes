@@ -21,7 +21,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 7;
+    private static int max = 71;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
@@ -64,19 +64,21 @@ public class Primes {
             solutionStack.push(remainingNumbersStack.getFirst());
             System.out.println("Current state of SolutionStack: ");
             printSolution();
-            if (solutionStack.size() > max) {
-                return;
-            }
+           
             //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
             remainingNumbersStack.pop();
+             if (solutionStack.size() > max) {
+                return;
+            }
 
         } else {
             //pushing the top element to the end of the stack
             int tempSwapHolderHead = remainingNumbersStack.getFirst();
             if (!(remainingNumbersStack.isEmpty())) {
                 System.out.println("Current state of remainingEleStack just before popping: ");
+                printRemainingEleStack();
             }
-            printRemainingEleStack();
+            
             remainingNumbersStack.pop();
             remainingNumbersStack.offerLast(tempSwapHolderHead);
 //           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();

@@ -23,7 +23,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 71;
+    private static int max = 7;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
@@ -48,16 +48,18 @@ public class Primes {
             remainingNumbersStack.push(i);
         }
         //***System.out.println("Beginning SolutionStack is: ");
-        printSolution();
+//        printSolution();
         //***System.out.println("Beginning RemainingNumbersStack is: ");
         //printRemainingEleStack();
         calculateSolution();
+          printSolution();
 
     }
 
     private static void calculateSolution() {
 
-        if (remainingNumbersStack.size() < 1) {
+        if (remainingNumbersStack.size() == 1) {
+            solutionStack.push(remainingNumbersStack.pop());
             return;
         }
         //***System.out.println("solutionStack.getFirst() is "+solutionStack.getFirst());
@@ -68,7 +70,7 @@ public class Primes {
             //If it's a prime, it's eligible to be pushed to the solutionstack and be placed next to the current element. 
             solutionStack.push(remainingNumbersStack.getFirst());
             //***System.out.println("Current state of SolutionStack: ");
-            printSolution();
+//            printSolution();
            
             //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
             remainingNumbersStack.pop();
@@ -107,6 +109,7 @@ public class Primes {
 
         }
         calculateSolution();
+      
     }
 
     private static void populatePrimes(int min, int max) {
@@ -132,7 +135,7 @@ public class Primes {
 
     private static void printSolution() {
         for (int i : solutionStack) {
-            //***System.out.print(i + " ");
+            System.out.print(i + " ");
         }
         //***System.out.println();
     }

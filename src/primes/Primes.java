@@ -83,7 +83,7 @@ public class Primes {
                 return;
             if(listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())){
 //                solutionStack = Collections.reverse(solutionStack.clone());
-                reverseSolutionStack();
+//                reverseSolutionStack();
                 
             }
             
@@ -99,7 +99,7 @@ public class Primes {
            
             remainingNumbersStack.offerLast(tempSwapHolderHead);
             //marking this element as touched
-            listOfEleThatHaveBeenRecycled.add(tempSwapHolderHead);
+//            listOfEleThatHaveBeenRecycled.add(tempSwapHolderHead);
             if(remainingNumbersStack.size()>=1)
             remainingNumbersStack.pop();
 //           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
@@ -108,6 +108,9 @@ public class Primes {
 //           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
 
         }
+//        System.out.println("State of SolutionStack after the current interation: ");
+//            printSolution();
+        
         calculateSolution();
       
     }

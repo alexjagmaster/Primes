@@ -40,30 +40,36 @@ public class Primes {
         {
             remainingNumbersStack.push(i);
         }
-        
+        calculateSolution(remainingNumbersStack);
    while(remainingNumbersStack.size()>1){
-       //check if sum of the last element of SA and the top most element of RS is a prime number (if its in the primeNumberArray)
+ 
+   }
+               
+   for(int i:solutionStack)
+       System.out.println(i);
+    }
+    private static void calculateSolution(Deque<Integer> remainingNumbersStack){
+              //check if sum of the last element of SA and the top most element of RS is a prime number (if its in the primeNumberArray)
        if(primeNumbersArray.contains(solutionStack.getFirst()+remainingNumbersStack.getFirst())){
            //If it's a prime, it's eligible to be pushed to the solutionstack and be placed next to the current element. 
            solutionStack.push(remainingNumbersStack.getFirst());
+           if(solutionStack.size()>max)
+               return;
            //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
            remainingNumbersStack.pop();
+           calculateSolution(remainingNumbersStack);
        }
        else{
-           //swapping the head, (head-1)th values of the remainingNumbersStack
+           //pushing the top element to the end of the stack
            int tempSwapHolderHead=remainingNumbersStack.getFirst();
            remainingNumbersStack.pop();
-           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
-           remainingNumbersStack.pop();
-           remainingNumbersStack.push(tempSwapHolderHead);
-           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
+           remainingNumbersStack.offerLast(tempSwapHolderHead);
+//           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
+//           remainingNumbersStack.pop();
+//           remainingNumbersStack.push(tempSwapHolderHead);
+//           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
            
        }
-   }
-        
-        
-   for(int i:solutionStack)
-       System.out.println(i);
     }
      private static void populatePrimes(int min, int max) {
         

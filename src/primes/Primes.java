@@ -30,6 +30,8 @@ public class Primes {
     public static void main(String[] args) {
         
         populatePrimes(min, max); 
+        System.out.println("Populated primes are: ");
+        printPrimes();
         //Display Primes
 //        for (Integer num : primeNumbersArray) {
 //            System.out.println(num);
@@ -41,13 +43,11 @@ public class Primes {
         {
             remainingNumbersStack.push(i);
         }
-        calculateSolution(remainingNumbersStack);
+        calculateSolution();
 
-               
-   for(int i:solutionStack)
-       System.out.println(i);
     }
-    private static void calculateSolution(Deque<Integer> remainingNumbersStack){
+
+    private static void calculateSolution(){
         
         if(remainingNumbersStack.size()<1)
             return;
@@ -56,6 +56,8 @@ public class Primes {
        if(primeNumbersArray.contains(sumOfHeadsOfSolAndRemaining)){
            //If it's a prime, it's eligible to be pushed to the solutionstack and be placed next to the current element. 
            solutionStack.push(remainingNumbersStack.getFirst());
+           System.out.println("Current state of SolutionStack: ");
+           printSolution();
            if(solutionStack.size()>max)
                return;
            //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
@@ -66,6 +68,8 @@ public class Primes {
            //pushing the top element to the end of the stack
            int tempSwapHolderHead=remainingNumbersStack.getFirst();
            if(!(remainingNumbersStack.isEmpty()))
+               System.out.println("Current state of remainingEleStack just before popping: ");
+               printRemainingEleStack();
            remainingNumbersStack.pop();
            remainingNumbersStack.offerLast(tempSwapHolderHead);
 //           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
@@ -74,7 +78,7 @@ public class Primes {
 //           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
            
        }
-       calculateSolution(remainingNumbersStack);
+       calculateSolution();
     }
      private static void populatePrimes(int min, int max) {
         
@@ -95,6 +99,23 @@ public class Primes {
             }
 
         }
+    }
+     private static void printSolution(){
+            for(int i:solutionStack)
+       System.out.print(i+ " ");
+            System.out.println();
+    }
+     //should've used generics.. Just being lazy
+      private static void printRemainingEleStack(){
+            for(int i:remainingNumbersStack)
+       System.out.print(i+ " ");
+            System.out.println();
+    }
+     
+      private static void printPrimes(){
+            for(int i:primeNumbersArray)
+       System.out.print(i+ " ");
+            System.out.println();
     }
     
 }

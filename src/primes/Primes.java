@@ -23,11 +23,14 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 7;
+    private static int max = 71;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
     private static List<Integer> listOfEleThatHaveBeenRecycled =  new ArrayList<Integer>();
+    private static int currSizeOfSolutionArray = 0;
+    private static int prevSizeOfSolutionArray = 0;
+    private static int stuckCounter=0;
 
     public static void main(String[] args) {
 
@@ -79,6 +82,18 @@ public class Primes {
 //            }
 
         } else {
+            currSizeOfSolutionArray=solutionStack.size();
+            if(prevSizeOfSolutionArray==currSizeOfSolutionArray)
+                    stuckCounter++;
+            else
+                if(prevSizeOfSolutionArray<currSizeOfSolutionArray)
+                    stuckCounter=0;
+            
+            if(stuckCounter>max)
+            {
+                System.out.println("stopping! stuck!! "+ stuckCounter);
+                return;
+            }
             if(remainingNumbersStack.size()==1)
                 return;
             if(listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())){
@@ -106,6 +121,7 @@ public class Primes {
 //           remainingNumbersStack.pop();
 //           remainingNumbersStack.push(tempSwapHolderHead);
 //           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
+            prevSizeOfSolutionArray=solutionStack.size();
 
         }
 //        System.out.println("State of SolutionStack after the current interation: ");

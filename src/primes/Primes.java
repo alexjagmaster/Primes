@@ -8,7 +8,9 @@ package primes;
 import static java.lang.Math.sqrt;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,16 +27,19 @@ public class Primes {
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
+    private static List<Integer> listOfEleThatHaveBeenRecycled =  new ArrayList<Integer>();
 
     public static void main(String[] args) {
 
         populatePrimes(min, max);
-        System.out.println("Populated primes are: ");
+        //***System.out.println("Populated primes are: ");
         printPrimes();
+        //food for thought
+        listOfEleThatHaveBeenRecycled.add(-1);
 
         //Display Primes
 //        for (Integer num : primeNumbersArray) {
-//            System.out.println(num);
+//            //***System.out.println(num);
 //        }
         //populating the first element of the solutionArray manually
         solutionStack.push(min);
@@ -42,10 +47,10 @@ public class Primes {
         for (int i = min + 1; i <= max; i++) {
             remainingNumbersStack.push(i);
         }
-        System.out.println("Beginning SolutionStack is: ");
+        //***System.out.println("Beginning SolutionStack is: ");
         printSolution();
-        System.out.println("Beginning RemainingNumbersStack is: ");
-        printRemainingEleStack();
+        //***System.out.println("Beginning RemainingNumbersStack is: ");
+        //printRemainingEleStack();
         calculateSolution();
 
     }
@@ -55,32 +60,46 @@ public class Primes {
         if (remainingNumbersStack.size() < 1) {
             return;
         }
-        System.out.println("solutionStack.getFirst() is "+solutionStack.getFirst());
-        System.out.println("remainingNumbersStack.getFirst() is "+remainingNumbersStack.getFirst());
+        //***System.out.println("solutionStack.getFirst() is "+solutionStack.getFirst());
+        //***System.out.println("remainingNumbersStack.getFirst() is "+remainingNumbersStack.getFirst());
         int sumOfHeadsOfSolAndRemaining = solutionStack.getFirst() + remainingNumbersStack.getFirst();
         //check if sum of the last element of SA and the top most element of RS is a prime number (if its in the primeNumberArray)
         if (primeNumbersArray.contains(sumOfHeadsOfSolAndRemaining)) {
             //If it's a prime, it's eligible to be pushed to the solutionstack and be placed next to the current element. 
             solutionStack.push(remainingNumbersStack.getFirst());
-            System.out.println("Current state of SolutionStack: ");
+            //***System.out.println("Current state of SolutionStack: ");
             printSolution();
            
             //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
             remainingNumbersStack.pop();
-             if (solutionStack.size() > max) {
-                return;
-            }
+//             if (solutionStack.size() > max) {
+//                return;
+//            }
 
         } else {
+            if(remainingNumbersStack.size()==1)
+                return;
+            if(listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())){
+//                solutionStack = Collections.reverse(solutionStack.clone());
+                reverseSolutionStack();
+                
+            }
+            
+            
             //pushing the top element to the end of the stack
             int tempSwapHolderHead = remainingNumbersStack.getFirst();
             if (!(remainingNumbersStack.isEmpty())) {
-                System.out.println("Current state of remainingEleStack just before popping: ");
-                printRemainingEleStack();
+                //***System.out.println("Current state of remainingEleStack just before popping: ");
+                //printRemainingEleStack();
+                 
             }
             
-            remainingNumbersStack.pop();
+           
             remainingNumbersStack.offerLast(tempSwapHolderHead);
+            //marking this element as touched
+            listOfEleThatHaveBeenRecycled.add(tempSwapHolderHead);
+            if(remainingNumbersStack.size()>=1)
+            remainingNumbersStack.pop();
 //           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
 //           remainingNumbersStack.pop();
 //           remainingNumbersStack.push(tempSwapHolderHead);
@@ -113,24 +132,36 @@ public class Primes {
 
     private static void printSolution() {
         for (int i : solutionStack) {
-            System.out.print(i + " ");
+            //***System.out.print(i + " ");
         }
-        System.out.println();
+        //***System.out.println();
     }
 
     //should've used generics.. Just being lazy
     private static void printRemainingEleStack() {
         for (int i : remainingNumbersStack) {
-            System.out.print(i + " ");
+            //***System.out.print(i + " ");
         }
-        System.out.println();
+        //***System.out.println();
     }
 
     private static void printPrimes() {
         for (int i : primeNumbersArray) {
-            System.out.print(i + " ");
+            //***System.out.print(i + " ");
         }
-        System.out.println();
+        //***System.out.println();
     }
 
+     public static void reverseSolutionStack()
+    {
+        Deque<Integer> reversedSolutionStack = new ArrayDeque<Integer>(max);
+        Iterator it = solutionStack.descendingIterator();
+        while(it.hasNext()) {
+         int  element = (int) it.next();
+         reversedSolutionStack.addLast(element);
+      }
+        solutionStack= reversedSolutionStack;
+    }
+ 
+   
 }

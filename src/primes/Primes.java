@@ -23,7 +23,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 71;
+    private static int max = 8;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
@@ -31,6 +31,7 @@ public class Primes {
     private static int currSizeOfSolutionArray = 0;
     private static int prevSizeOfSolutionArray = 0;
     private static int stuckCounter=0;
+    private static boolean infiniteLoopDetected=false;
 
     public static void main(String[] args) {
 
@@ -52,10 +53,11 @@ public class Primes {
         }
         //***System.out.println("Beginning SolutionStack is: ");
 //        printSolution();
-        //***System.out.println("Beginning RemainingNumbersStack is: ");
-        //printRemainingEleStack();
         calculateSolution();
-          printSolution();
+        System.out.println("Solution: ");
+          printSolution();System.out.println("");
+        System.out.println("Unresolved elements: ");
+        printRemainingEleStack();
 
     }
 
@@ -91,9 +93,14 @@ public class Primes {
             
             if(stuckCounter>max)
             {
+                reverseSolutionStack();
+                if(infiniteLoopDetected){
                 System.out.println("stopping! stuck!! "+ stuckCounter);
                 return;
-            }
+                }
+                infiniteLoopDetected=true;
+            
+           }
             if(remainingNumbersStack.size()==1)
                 return;
             if(listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())){
@@ -162,7 +169,7 @@ public class Primes {
     //should've used generics.. Just being lazy
     private static void printRemainingEleStack() {
         for (int i : remainingNumbersStack) {
-            //***System.out.print(i + " ");
+            System.out.print(i + " ");
         }
         //***System.out.println();
     }

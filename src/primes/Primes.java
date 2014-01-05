@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -23,15 +24,17 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 8;
+    private static int max = 71;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
     private static List<Integer> listOfEleThatHaveBeenRecycled = new ArrayList<Integer>();
+    private static Deque<Integer> finalUnresolved = new ArrayDeque<Integer>(max);
     private static int currSizeOfSolutionArray = 0;
     private static int prevSizeOfSolutionArray = 0;
     private static int stuckCounter = 0;
     private static boolean infiniteLoopDetected = false;
+    private static   int counter=0;
     
    private static List<Integer> solutionArray = new ArrayList<Integer>(max);
       private static          List<Integer> unresolvedArray = new ArrayList<Integer>();
@@ -65,6 +68,11 @@ public class Primes {
         
 //        System.out.println("Solution: ");
         printSolutionArray();
+        
+        System.out.println("");
+//        printRemainingEleArray();
+         if(remainingNumbersStack.size()!=0)
+        bruteForceResolver();
 
     }
 
@@ -158,6 +166,12 @@ int secondtargetSum=0;
                     }
                     
                 }
+                if(solutionStack.size()>0){
+                    
+                    System.out.println("Still noticed non zero unresolved elements. Attempting brute force algorithm now..");
+//                    bruteForceResolver();
+                    
+                }
 return;
             }
             if (remainingNumbersStack.size() == 1) {
@@ -228,6 +242,10 @@ return;
     //should've used generics.. Just being lazy
     private static void printRemainingEleStack() {
          System.out.println("unresolved elements");
+         if(remainingNumbersStack.size()==0)
+             System.out.println("All resolved!");
+         else
+             
         for (int i : remainingNumbersStack) {
             System.out.print(i + " ");
         }
@@ -271,6 +289,94 @@ return;
     public static boolean checkFit(int unresolvedEle) {
 
         return false;
+    }
+    
+    // Fisher–Yates shuffle
+  static void shuffleArray()
+  {
+      Collections.shuffle(unresolvedArray);
+
+  }
+  
+  static void bruteForceResolver(){
+    
+      
+      int targetSum=0;
+      int secondtargetSum=0;
+      unresolvedArray = new ArrayList<Integer>(max);
+      solutionArray = new ArrayList<Integer>(max);
+      finalUnresolved = new ArrayDeque<Integer>(max);
+      for (int i = min + 1; i <= max; i++) {
+            unresolvedArray.add(i);
+        }
+      
+        for (int i = min + 1; i <= max; i++) {
+            finalUnresolved.push(i);
+        }
+//      Collections.shuffle(unresolvedArray);
+         
+      for (int i = 0; i < unresolvedArray.size(); i++) {
+                  //looping through solutionArray
+          if(solutionArray==null){
+              solutionArray.add(unresolvedArray.get(0));
+                 continue;
+          }
+//          unresolvedArray.remove(0)
+                    for(int j=0;j<solutionArray.size();j++){
+                        //if the index is 0 then only the 0th ele can be compared and if successful, the unresolvedarray ele can be placed before it
+                          if (j== 0) {
+                              targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                              if(primeNumbersArray.contains(targetSum)){
+                                  solutionArray.add(0, unresolvedArray.get(i));
+                                  finalUnresolved.removeFirstOccurrence(unresolvedArray.get(i));
+                                  
+                              }
+
+                    } else 
+                              //if the index is of the last ele, and match is successful, the unresolved.. can be placed after it
+                              if (j == solutionArray.size() - 1) {
+                        targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                            if(primeNumbersArray.contains(targetSum)){
+                                  solutionArray.add(unresolvedArray.get(i));
+                                  finalUnresolved.removeFirstOccurrence(unresolvedArray.get(i));
+                                  
+                              }
+
+                    } else {
+                                  targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                                  secondtargetSum=unresolvedArray.get(i)+solutionArray.get(j+1);
+                            if(primeNumbersArray.contains(targetSum) &&
+                                      primeNumbersArray.contains(secondtargetSum)){
+                                 solutionArray.add(j+1, unresolvedArray.get(i));
+                                 finalUnresolved.removeFirstOccurrence(unresolvedArray.get(i));
+                                
+                            }
+                    }
+                    }
+                    
+                }
+      
+      if(finalUnresolved.size()>0)
+      {
+          counter++;
+          System.out.println("Retrying... attempt "+counter);
+          
+          bruteForceResolver();
+      }
+      else
+      {
+          System.out.println("Solution Found!");
+          printSolutionArray();
+          printFinalUnresolvedArray();
+      }
+  }
+
+    private static void printFinalUnresolvedArray() {
+        System.out.println("Final Unresolved elements");
+        for (int i : remainingNumbersStack) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
     }
 
 }

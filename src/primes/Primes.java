@@ -156,9 +156,9 @@ int secondtargetSum=0;
                             }
                     }
                     }
-                    return;
+                    
                 }
-
+return;
             }
             if (remainingNumbersStack.size() == 1) {
                 return;

@@ -60,10 +60,10 @@ public class Primes {
 //        System.out.println("Solution: ");
 //        printSolution();
 //        System.out.println("");
-        System.out.println("Unresolved elements: ");
+//        System.out.println("Unresolved elements: sdf");
         printRemainingEleStack();
         
-        System.out.println("Solution: ");
+//        System.out.println("Solution: ");
         printSolutionArray();
 
     }
@@ -116,8 +116,11 @@ public class Primes {
                     solutionArray.add(currEle1);
                 }
 
+                
+                printSolutionArray();
+                printRemainingEleStack();
                
-                System.out.println();
+                System.out.println("Unresolved elements remain. Trying out a secondary Algorithm. Here is the final solution");
 int targetSum=0;
 int secondtargetSum=0;
                 for (int i = 0; i < unresolvedArray.size(); i++) {
@@ -224,10 +227,11 @@ int secondtargetSum=0;
 
     //should've used generics.. Just being lazy
     private static void printRemainingEleStack() {
+         System.out.println("unresolved elements");
         for (int i : remainingNumbersStack) {
             System.out.print(i + " ");
         }
-        //***System.out.println();
+        System.out.println();
     }
 
     private static void printSolutionArray() {
@@ -235,6 +239,7 @@ int secondtargetSum=0;
                 for (int currEle : solutionArray) {
                     System.out.print(currEle + " ");
                 }
+                System.out.println();
     }
 
     //should've used generics.. Just being lazy

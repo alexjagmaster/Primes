@@ -23,15 +23,15 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 8;
+    private static int max = 78;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
-    private static List<Integer> listOfEleThatHaveBeenRecycled =  new ArrayList<Integer>();
+    private static List<Integer> listOfEleThatHaveBeenRecycled = new ArrayList<Integer>();
     private static int currSizeOfSolutionArray = 0;
     private static int prevSizeOfSolutionArray = 0;
-    private static int stuckCounter=0;
-    private static boolean infiniteLoopDetected=false;
+    private static int stuckCounter = 0;
+    private static boolean infiniteLoopDetected = false;
 
     public static void main(String[] args) {
 
@@ -55,7 +55,8 @@ public class Primes {
 //        printSolution();
         calculateSolution();
         System.out.println("Solution: ");
-          printSolution();System.out.println("");
+        printSolution();
+        System.out.println("");
         System.out.println("Unresolved elements: ");
         printRemainingEleStack();
 
@@ -76,7 +77,7 @@ public class Primes {
             solutionStack.push(remainingNumbersStack.getFirst());
             //***System.out.println("Current state of SolutionStack: ");
 //            printSolution();
-           
+
             //Now popping out the last element of the remainingstackarray as its already pushed to the solution array
             remainingNumbersStack.pop();
 //             if (solutionStack.size() > max) {
@@ -84,63 +85,116 @@ public class Primes {
 //            }
 
         } else {
-            currSizeOfSolutionArray=solutionStack.size();
-            if(prevSizeOfSolutionArray==currSizeOfSolutionArray)
-                    stuckCounter++;
-            else
-                if(prevSizeOfSolutionArray<currSizeOfSolutionArray)
-                    stuckCounter=0;
-            
-            if(stuckCounter>max)
-            {
-                reverseSolutionStack();
-                if(infiniteLoopDetected){
-                System.out.println("stopping! stuck!! "+ stuckCounter);
-                return;
+            currSizeOfSolutionArray = solutionStack.size();
+            if (prevSizeOfSolutionArray == currSizeOfSolutionArray) {
+                stuckCounter++;
+            } else if (prevSizeOfSolutionArray < currSizeOfSolutionArray) {
+                stuckCounter = 0;
+            }
+
+            if (stuckCounter > max) {
+//                reverseSolutionStack();
+                if (infiniteLoopDetected) {
+                    System.out.println("stopping! loop detected after " + stuckCounter + " attempts!");
+                    return;
                 }
-                infiniteLoopDetected=true;
-            
-           }
-            if(remainingNumbersStack.size()==1)
+                infiniteLoopDetected = true;
+
+                List<Integer> solutionArray = new ArrayList<Integer>(max);
+                List<Integer> unresolvedArray = new ArrayList<Integer>();
+
+           //copying over the remnants to Arrays. Sunk cost!!!
+                for (int currEle : remainingNumbersStack) {
+                    unresolvedArray.add(currEle);
+                }
+                for (int currEle1 : solutionStack) {
+                    solutionArray.add(currEle1);
+                }
+
+                System.out.println("unresolvedArray");
+                for (int currEle : unresolvedArray) {
+                    System.out.print(currEle + " ");
+                }
+                System.out.println();
+                System.out.println("solutionArray");
+                for (int currEle : solutionArray) {
+                    System.out.print(currEle + " ");
+                }
+                System.out.println();
+
+                for (int i = 0; i < unresolvedArray.size(); i++) {
+                  //looping through solutionArray
+                    for(int j=0;j<solutionArray.size();j++){
+                        //if the index is 0 then only the 0th ele can be compared and if successful, the unresolvedarray ele can be placed before it
+                          if (j== 0) {
+                              if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j))){
+                                  solutionArray.add(0, unresolvedArray.get(i));
+                                  remainingNumbersStack.removeFirstOccurrence(unresolvedArray.get(i));
+                                  
+                              }
+
+                    } else 
+                              //if the index is of the last ele, and match is successful, the unresolved.. can be placed after it
+                              if (j == solutionArray.size() - 1) {
+                        
+                            if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j))){
+                                  solutionArray.add(solutionArray.get(j));
+                                  remainingNumbersStack.removeFirstOccurrence(unresolvedArray.get(i));
+                                  
+                              }
+
+                    } else {
+                                  
+                            if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j)) &&
+                                      primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j+1))){
+                                 solutionArray.add(0, unresolvedArray.get(j+1));
+                                
+                            }
+                    }
+                    }
+                }
+
+            }
+            if (remainingNumbersStack.size() == 1) {
                 return;
-            if(listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())){
+            }
+            if (listOfEleThatHaveBeenRecycled.contains(remainingNumbersStack.getFirst())) {
 //                solutionStack = Collections.reverse(solutionStack.clone());
 //                reverseSolutionStack();
-                
+
             }
-            
-            
+
             //pushing the top element to the end of the stack
             int tempSwapHolderHead = remainingNumbersStack.getFirst();
             if (!(remainingNumbersStack.isEmpty())) {
                 //***System.out.println("Current state of remainingEleStack just before popping: ");
                 //printRemainingEleStack();
-                 
+
             }
-            
-           
+
             remainingNumbersStack.offerLast(tempSwapHolderHead);
             //marking this element as touched
 //            listOfEleThatHaveBeenRecycled.add(tempSwapHolderHead);
-            if(remainingNumbersStack.size()>=1)
-            remainingNumbersStack.pop();
+            if (remainingNumbersStack.size() >= 1) {
+                remainingNumbersStack.pop();
+            }
 //           int tempSwapHolderHeadMinusOne=remainingNumbersStack.getFirst();
 //           remainingNumbersStack.pop();
 //           remainingNumbersStack.push(tempSwapHolderHead);
 //           remainingNumbersStack.push(tempSwapHolderHeadMinusOne);
-            prevSizeOfSolutionArray=solutionStack.size();
+            prevSizeOfSolutionArray = solutionStack.size();
 
         }
 //        System.out.println("State of SolutionStack after the current interation: ");
 //            printSolution();
-        
+
         calculateSolution();
-      
+
     }
 
     private static void populatePrimes(int min, int max) {
 
-        for (int i = min; i <= max*2; i++) {
+        for (int i = min; i <= max * 2; i++) {
             boolean isCurrNumberPrime = true;
             //optimization: need to check only till sqrt of the number instead till i-1
             for (int j = 2; j <= sqrt(i); j++) {
@@ -181,16 +235,19 @@ public class Primes {
         //***System.out.println();
     }
 
-     public static void reverseSolutionStack()
-    {
+    public static void reverseSolutionStack() {
         Deque<Integer> reversedSolutionStack = new ArrayDeque<Integer>(max);
         Iterator it = solutionStack.descendingIterator();
-        while(it.hasNext()) {
-         int  element = (int) it.next();
-         reversedSolutionStack.addLast(element);
-      }
-        solutionStack= reversedSolutionStack;
+        while (it.hasNext()) {
+            int element = (int) it.next();
+            reversedSolutionStack.addLast(element);
+        }
+        solutionStack = reversedSolutionStack;
     }
- 
-   
+
+    public static boolean checkFit(int unresolvedEle) {
+
+        return false;
+    }
+
 }

@@ -23,7 +23,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 78;
+    private static int max = 8;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
@@ -32,6 +32,9 @@ public class Primes {
     private static int prevSizeOfSolutionArray = 0;
     private static int stuckCounter = 0;
     private static boolean infiniteLoopDetected = false;
+    
+   private static List<Integer> solutionArray = new ArrayList<Integer>(max);
+      private static          List<Integer> unresolvedArray = new ArrayList<Integer>();
 
     public static void main(String[] args) {
 
@@ -54,11 +57,14 @@ public class Primes {
         //***System.out.println("Beginning SolutionStack is: ");
 //        printSolution();
         calculateSolution();
-        System.out.println("Solution: ");
-        printSolution();
-        System.out.println("");
+//        System.out.println("Solution: ");
+//        printSolution();
+//        System.out.println("");
         System.out.println("Unresolved elements: ");
         printRemainingEleStack();
+        
+        System.out.println("Solution: ");
+        printSolutionArray();
 
     }
 
@@ -100,8 +106,7 @@ public class Primes {
                 }
                 infiniteLoopDetected = true;
 
-                List<Integer> solutionArray = new ArrayList<Integer>(max);
-                List<Integer> unresolvedArray = new ArrayList<Integer>();
+                
 
            //copying over the remnants to Arrays. Sunk cost!!!
                 for (int currEle : remainingNumbersStack) {
@@ -111,23 +116,17 @@ public class Primes {
                     solutionArray.add(currEle1);
                 }
 
-                System.out.println("unresolvedArray");
-                for (int currEle : unresolvedArray) {
-                    System.out.print(currEle + " ");
-                }
+               
                 System.out.println();
-                System.out.println("solutionArray");
-                for (int currEle : solutionArray) {
-                    System.out.print(currEle + " ");
-                }
-                System.out.println();
-
+int targetSum=0;
+int secondtargetSum=0;
                 for (int i = 0; i < unresolvedArray.size(); i++) {
                   //looping through solutionArray
                     for(int j=0;j<solutionArray.size();j++){
                         //if the index is 0 then only the 0th ele can be compared and if successful, the unresolvedarray ele can be placed before it
                           if (j== 0) {
-                              if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j))){
+                              targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                              if(primeNumbersArray.contains(targetSum)){
                                   solutionArray.add(0, unresolvedArray.get(i));
                                   remainingNumbersStack.removeFirstOccurrence(unresolvedArray.get(i));
                                   
@@ -136,22 +135,25 @@ public class Primes {
                     } else 
                               //if the index is of the last ele, and match is successful, the unresolved.. can be placed after it
                               if (j == solutionArray.size() - 1) {
-                        
-                            if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j))){
-                                  solutionArray.add(solutionArray.get(j));
+                        targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                            if(primeNumbersArray.contains(targetSum)){
+                                  solutionArray.add(unresolvedArray.get(i));
                                   remainingNumbersStack.removeFirstOccurrence(unresolvedArray.get(i));
                                   
                               }
 
                     } else {
-                                  
-                            if(primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j)) &&
-                                      primeNumbersArray.contains(unresolvedArray.get(i)+solutionArray.get(j+1))){
-                                 solutionArray.add(0, unresolvedArray.get(j+1));
+                                  targetSum=unresolvedArray.get(i)+solutionArray.get(j);
+                                  secondtargetSum=unresolvedArray.get(i)+solutionArray.get(j+1);
+                            if(primeNumbersArray.contains(targetSum) &&
+                                      primeNumbersArray.contains(secondtargetSum)){
+                                 solutionArray.add(j+1, unresolvedArray.get(i));
+                                 remainingNumbersStack.removeFirstOccurrence(unresolvedArray.get(i));
                                 
                             }
                     }
                     }
+                    return;
                 }
 
             }
@@ -226,6 +228,22 @@ public class Primes {
             System.out.print(i + " ");
         }
         //***System.out.println();
+    }
+
+    private static void printSolutionArray() {
+                System.out.println("solutionArray");
+                for (int currEle : solutionArray) {
+                    System.out.print(currEle + " ");
+                }
+    }
+
+    //should've used generics.. Just being lazy
+    private static void printRemainingEleArray() {
+         System.out.println("unresolvedArray");
+                for (int currEle : unresolvedArray) {
+                    System.out.print(currEle + " ");
+                }
+
     }
 
     private static void printPrimes() {

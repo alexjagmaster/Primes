@@ -24,7 +24,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 71;
+    private static int max = 17;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
@@ -69,11 +69,14 @@ public class Primes {
 //        System.out.println("Solution: ");
         printSolutionArray();
         
+        
         System.out.println("");
 //        printRemainingEleArray();
-         if(remainingNumbersStack.size()!=0)
-        bruteForceResolver();
-
+//         if(remainingNumbersStack.size()!=0)
+//        bruteForceResolver();
+        
+        printSolution();
+        
     }
 
     private static void calculateSolution() {

@@ -24,7 +24,7 @@ public class Primes {
      * @param args the command line arguments
      */
     private static int min = 1;
-    private static int max = 17;
+    private static int max = 14;
     private static Deque<Integer> solutionStack = new ArrayDeque<Integer>(max);
     private static Deque<Integer> remainingNumbersStack = new ArrayDeque<Integer>(max);
     private static List<Integer> primeNumbersArray = new ArrayList<Integer>(max);
